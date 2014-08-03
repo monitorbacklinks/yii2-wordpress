@@ -1,0 +1,33 @@
+{
+    "name": "monitorbacklinks/yii2-wordpress",
+    "description": "Yii2 component for integration with Wordpress CMS via XML-RPC API",
+    "homepage": "http://monitorbacklinks.github.io/yii2-wordpress/",
+    "keywords": ["yii", "yii2", "wordpress", "xml-rpc", "xmlrpc", "wp", "integration"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/monitorbacklinks/yii2-wordpress/issues",
+        "source": "https://github.com/monitorbacklinks/yii2-wordpress"
+    },
+    "authors": [
+        {
+            "name": "Ivan Koptiev",
+            "email": "ivan@monitorbacklinks.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "hieu-le/wordpress-xmlrpc-client": "~2.0"
+    },
+	"require-dev": {
+		"codeception/codeception": "~2.0"
+	},
+    "autoload": {
+        "psr-4": {
+            "monitorbacklinks\\yii2wp\\": ""
+        }
+    }
+}
