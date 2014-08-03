@@ -15,8 +15,6 @@ use yii\validators\UrlValidator;
  * by [Hieu Le Trung](https://github.com/letrunghieu).
  *
  * @method string getErrorMessage() Get the latest error message.
- * @method boolean|array getProxy() Get current proxy config.
- * @method boolean|array getAuth() Get the current HTTP authentication config.
  * @method array getPost(integer $postId, array $fields = array()) Retrieve a post of any registered post type.
  * @method array getPosts(array $filters = array(), array $fields = array()) Retrieve list of posts of any registered post type.
  * @method integer newPost(string $title, string $body, array $content = array()) Create a new post of any registered post type.
@@ -73,30 +71,6 @@ class Wordpress extends Component
     public $password;
 
     /**
-     * @var bool $proxyConfig Proxy server config.
-     * This configuration array should follow the following format:
-     * <ul>
-     *    <li><code>proxy_ip</code>: the ip of the proxy server (WITHOUT port)</li>
-     *    <li><code>proxy_port</code>: the port of the proxy server</li>
-     *    <li><code>proxy_user</code>: the username for proxy authorization</li>
-     *    <li><code>proxy_pass</code>: the password for proxy authorization</li>
-     *    <li><code>proxy_mode</code>: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)</li>
-     * </ul>
-     */
-    public $proxyConfig = false;
-
-    /**
-     * @var bool $authConfig Server HTTP-authentication config.
-     * This configuration array should follow the following format:
-     * <ul>
-     *    <li><code>auth_user</code>: the username for server authentication</li>
-     *    <li><code>auth_pass</code>: the password for server authentication</li>
-     *    <li><code>auth_mode</code>: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)</li>
-     * </ul>
-     */
-    public $authConfig = false;
-
-    /**
      * @var WordpressClient $_clientInstance Wordpress API client instance.
      */
     private $_clientInstance;
@@ -122,14 +96,6 @@ class Wordpress extends Component
 
         // Create API client
         $this->_clientInstance = new WordpressClient($this->endpoint, $this->username, $this->password);
-
-        // Set proxy and auth configuration
-        try {
-            $this->_clientInstance->setProxy($this->proxyConfig);
-            $this->_clientInstance->setAuth($this->authConfig);
-        } catch (\InvalidArgumentException $exception) {
-            throw new InvalidConfigException($exception->getMessage());
-        }
     }
 
     /**

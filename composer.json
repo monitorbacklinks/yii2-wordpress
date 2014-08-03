@@ -19,6 +19,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
+        "ext-xmlrpc": "*",
         "yiisoft/yii2": "*",
         "hieu-le/wordpress-xmlrpc-client": "~2.0"
     },

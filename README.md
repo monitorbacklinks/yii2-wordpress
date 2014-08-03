@@ -45,8 +45,8 @@ Create a component in your configuration file:
     'components' => [
         ...
         'blog' => [
-            'class' => 'monitorbacklinks\yii2wp\Wordpress',
-            'endpoint' => 'http://example.com/endpoint.php',
+            'class' => '\monitorbacklinks\yii2wp\Wordpress',
+            'endpoint' => 'http://example.com/xmlrpc.php',
             'username' => 'demo',
             'password' => 'demo'
         ]
@@ -81,26 +81,6 @@ Wordpress authentication username.
 #### `$password`
 
 Wordpress authentication password.
-
-#### `$proxyConfig`
-
-Proxy server config.
-This configuration array should follow the following format:
-
-- `proxy_ip`: the ip of the proxy server (WITHOUT port)
-- `proxy_port`: the port of the proxy server
-- `proxy_user`: the username for proxy authorization
-- `proxy_pass`: the password for proxy authorization
-- `proxy_mode`: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)
-
-#### `$authConfig`
-
-Server HTTP-authentication config.
-This configuration array should follow the following format:
-
-- `auth_user`: the username for server authentication
-- `auth_pass`: the password for server authentication
-- `auth_mode`: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)
 
 
 ## Report
