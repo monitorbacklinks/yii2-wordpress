@@ -14,6 +14,43 @@ use yii\validators\UrlValidator;
  * This component is built on top of [Wordpress XML-RPC PHP Client](https://github.com/letrunghieu/wordpress-xmlrpc-client)
  * by [Hieu Le Trung](https://github.com/letrunghieu).
  *
+ * @method string getErrorMessage() Get the latest error message.
+ * @method boolean|array getProxy() Get current proxy config.
+ * @method boolean|array getAuth() Get the current HTTP authentication config.
+ * @method array getPost(integer $postId, array $fields = array()) Retrieve a post of any registered post type.
+ * @method array getPosts(array $filters = array(), array $fields = array()) Retrieve list of posts of any registered post type.
+ * @method integer newPost(string $title, string $body, array $content = array()) Create a new post of any registered post type.
+ * @method boolean editPost(integer $postId, string $content) Edit an existing post of any registered post type.
+ * @method boolean deletePost(integer $postId) Delete an existing post of any registered post type.
+ * @method array getPostType(string $postTypeName, array $fields = array()) Retrieve a registered post type.
+ * @method array getPostTypes(array $filter = array(), array $fields = array()) Retrieve list of registered post types.
+ * @method array getPostFormats() Retrieve list of post formats.
+ * @method array getPostStatusList() Retrieve list of supported values for post_status field on posts.
+ * @method array getTaxonomy(string $taxonomy) Retrieve information about a taxonomy.
+ * @method array getTaxonomies() Retrieve a list of taxonomies.
+ * @method array getTerm(integer $termId, string $taxonomy) Retrieve a taxonomy term.
+ * @method array getTerms(string $taxonomy, array $filter = array()) Retrieve list of terms in a taxonomy.
+ * @method integer newTerm(string $name, string $taxomony, string $slug = null, string $description = null, integer $parentId = null) Create a new taxonomy term.
+ * @method boolean editTerm(integer $termId, string $taxonomy, array $content = array()) Edit an existing taxonomy term.
+ * @method boolean deleteTerm(integer $termId, string $taxonomy) Delete an existing taxonomy term.
+ * @method array getMediaItem(integer $itemId) Retrieve a media item (i.e, attachment).
+ * @method array getMediaLibrary(array $filter = array()) Retrieve list of media items.
+ * @method array uploadFile(string $name, string $mime, string $bits) Upload a media file.
+ * @method integer getCommentCount(integer $postId) Retrieve comment count for a specific post.
+ * @method array getComment(integer $commentId) Retrieve a comment.
+ * @method array getComments(array $filter = array()) Retrieve list of comments.
+ * @method integer newComment(integer $post_id, array $comment) Create a new comment.
+ * @method boolean editComment(integer $commentId, array $comment) Edit an existing comment.
+ * @method boolean deleteComment(integer $commentId) Remove an existing comment.
+ * @method array getCommentStatusList() Retrieve list of comment statuses.
+ * @method array getOptions(array $options = array()) Retrieve blog options.
+ * @method array setOptions(array $options) Edit blog options.
+ * @method array getUsersBlogs() Retrieve list of blogs for this user.
+ * @method array getUser(integer $userId, array $fields = array()) Retrieve a user.
+ * @method array getUsers(array $filters = array(), array $fields = array()) Retrieve list of users.
+ * @method array getProfile(array $fields = array()) Retrieve profile of the requesting user.
+ * @method boolean editProfile(array $content) Edit profile of the requesting user.
+ *
  * @link      https://github.com/monitorbacklinks/yii2-wordpress Yii2 Wordpress project page.
  * @license   https://github.com/monitorbacklinks/yii2-wordpress/blob/master/LICENSE.md MIT
  * @version   1.0.0
