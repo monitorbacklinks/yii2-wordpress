@@ -39,28 +39,70 @@ to the `require` section of your `composer.json` file.
 
 ## Usage
 
-Just pass the ScrollPager class name to the ListView `pager` configuration.
-Make sure that items in your list have some classes that can be used as JavaScript selectors.
+Create a component in your configuration file:
 
 ```php
-echo ListView::widget([
-     'dataProvider' => $dataProvider,
-     'itemOptions' => ['class' => 'item'],
-     'itemView' => '_item_view',
-     'pager' => ['class' => \kop\y2sp\ScrollPager::className()]
-]);
+    'components' => [
+        ...
+        'blog' => [
+            'class' => 'monitorbacklinks\yii2wp\Wordpress',
+            'endpoint' => 'http://example.com/endpoint.php',
+            'username' => 'demo',
+            'password' => 'demo'
+        ]
+        ...
+    ]
 ```
+
+After that just use this component:
+
+```php
+try {
+    $post = \Yii::$app->blog->getPost($id);
+} catch (\Exception $exception) {
+    echo $exception->getMessage();
+}
+```
+
+For more information about available methods and their options,
+please read [Wordpress XML-RPC PHP Client Class Reference](http://letrunghieu.github.io/wordpress-xmlrpc-client/api/class-HieuLe.WordpressXmlrpcClient.WordpressClient.html).
 
 
 ## Configuration
 
-### General Options
+#### `$endpoint`
 
-#### `container`
+Wordpress XML-RPC API endpoint URL.
 
-*Default:* ".list-view"
+#### `$username`
 
-Enter the selector of the element containing your items that you want to paginate.
+Wordpress authentication username.
+
+#### `$password`
+
+Wordpress authentication password.
+
+#### `$proxyConfig`
+
+Proxy server config.
+This configuration array should follow the following format:
+
+- `proxy_ip`: the ip of the proxy server (WITHOUT port)
+- `proxy_port`: the port of the proxy server
+- `proxy_user`: the username for proxy authorization
+- `proxy_pass`: the password for proxy authorization
+- `proxy_mode`: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)
+
+#### `$authConfig`
+
+Server HTTP-authentication config.
+This configuration array should follow the following format:
+
+- `auth_user`: the username for server authentication
+- `auth_pass`: the password for server authentication
+- `auth_mode`: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)
+
+
 ## Report
 
 - Report any issues [on the GitHub](https://github.com/monitorbacklinks/yii2-wordpress/issues).

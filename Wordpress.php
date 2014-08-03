@@ -86,7 +86,7 @@ class Wordpress extends Component
     public $proxyConfig = false;
 
     /**
-     * @var bool $authConfig Server authentication config.
+     * @var bool $authConfig Server HTTP-authentication config.
      * This configuration array should follow the following format:
      * <ul>
      *    <li><code>auth_user</code>: the username for server authentication</li>
