@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Yii2-wordpress : Yii2 component for integration with Wordpress CMS via XML-RPC API">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Yii2-wordpress</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/monitorbacklinks/yii2-wordpress">View on GitHub</a>
+
+          <h1 id="project_title">Yii2-wordpress</h1>
+          <h2 id="project_tagline">Yii2 component for integration with Wordpress CMS via XML-RPC API</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/monitorbacklinks/yii2-wordpress/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/monitorbacklinks/yii2-wordpress/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="yii2-wordpress" class="anchor" href="#yii2-wordpress"><span class="octicon octicon-link"></span></a>Yii2 Wordpress</h1>
+
+<p><a href="http://monitorbacklinks.github.io/yii2-wordpress">Yii2 Wordpress</a> is a component for <a href="https://github.com/yiisoft/yii2">Yii2 framework</a> designed for integration with Wordpress CMS via XML-RPC API.</p>
+
+<p>This component is built on top of <a href="https://github.com/letrunghieu/wordpress-xmlrpc-client">Wordpress XML-RPC PHP Client</a> by <a href="https://github.com/letrunghieu">Hieu Le Trung</a>.</p>
+
+<p><a href="https://packagist.org/packages/monitorbacklinks/yii2-wordpress"><img src="https://poser.pugx.org/monitorbacklinks/yii2-wordpress/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://travis-ci.org/monitorbacklinks/yii2-wordpress"><img src="https://travis-ci.org/monitorbacklinks/yii2-wordpress.svg?branch=master" alt="Build Status"></a>
+<a href="https://codeclimate.com/github/monitorbacklinks/yii2-wordpress"><img src="https://codeclimate.com/github/monitorbacklinks/yii2-wordpress.png" alt="Code Climate"></a>
+<a href="https://scrutinizer-ci.com/g/monitorbacklinks/yii2-wordpress/?branch=master"><img src="https://scrutinizer-ci.com/g/monitorbacklinks/yii2-wordpress/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"></a>
+<a href="https://www.versioneye.com/php/monitorbacklinks:yii2-wordpress"><img src="https://www.versioneye.com/php/monitorbacklinks:yii2-wordpress/badge.svg" alt="Version Eye"></a>
+<a href="https://packagist.org/packages/monitorbacklinks/yii2-wordpress"><img src="https://poser.pugx.org/monitorbacklinks/yii2-wordpress/license.svg" alt="License"></a></p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li>Yii 2.0 (dev-master)</li>
+<li>PHP 5.4</li>
+</ul><blockquote>
+<p>Note:
+This extension mandatorily requires <a href="https://github.com/yiisoft/yii2">Yii Framework 2</a>.
+The framework is under active development and the first stable release of Yii 2 is expected in early 2014.</p>
+</blockquote>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>The preferred way to install this extension is through <a href="http://getcomposer.org/">Composer</a>.</p>
+
+<p>Either run</p>
+
+<p><code>php composer.phar require monitorbacklinks/yii2-wordpress "dev-master"</code></p>
+
+<p>or add</p>
+
+<p><code>"monitorbacklinks/yii2-wordpress": "dev-master"</code></p>
+
+<p>to the <code>require</code> section of your <code>composer.json</code> file.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Create a component in your configuration file:</p>
+
+<div class="highlight highlight-php"><pre>    <span class="s1">'components'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+        <span class="o">...</span>
+        <span class="s1">'blog'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'monitorbacklinks\yii2wp\Wordpress'</span><span class="p">,</span>
+            <span class="s1">'endpoint'</span> <span class="o">=&gt;</span> <span class="s1">'http://example.com/endpoint.php'</span><span class="p">,</span>
+            <span class="s1">'username'</span> <span class="o">=&gt;</span> <span class="s1">'demo'</span><span class="p">,</span>
+            <span class="s1">'password'</span> <span class="o">=&gt;</span> <span class="s1">'demo'</span>
+        <span class="p">]</span>
+        <span class="o">...</span>
+    <span class="p">]</span>
+</pre></div>
+
+<p>After that just use this component:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">try</span> <span class="p">{</span>
+    <span class="nv">$post</span> <span class="o">=</span> <span class="nx">\Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">getPost</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$exception</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>For more information about available methods and their options,
+please read <a href="http://letrunghieu.github.io/wordpress-xmlrpc-client/api/class-HieuLe.WordpressXmlrpcClient.WordpressClient.html">Wordpress XML-RPC PHP Client Class Reference</a>.</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<h4>
+<a name="endpoint" class="anchor" href="#endpoint"><span class="octicon octicon-link"></span></a><code>$endpoint</code>
+</h4>
+
+<p>Wordpress XML-RPC API endpoint URL.</p>
+
+<h4>
+<a name="username" class="anchor" href="#username"><span class="octicon octicon-link"></span></a><code>$username</code>
+</h4>
+
+<p>Wordpress authentication username.</p>
+
+<h4>
+<a name="password" class="anchor" href="#password"><span class="octicon octicon-link"></span></a><code>$password</code>
+</h4>
+
+<p>Wordpress authentication password.</p>
+
+<h4>
+<a name="proxyconfig" class="anchor" href="#proxyconfig"><span class="octicon octicon-link"></span></a><code>$proxyConfig</code>
+</h4>
+
+<p>Proxy server config.
+This configuration array should follow the following format:</p>
+
+<ul>
+<li>
+<code>proxy_ip</code>: the ip of the proxy server (WITHOUT port)</li>
+<li>
+<code>proxy_port</code>: the port of the proxy server</li>
+<li>
+<code>proxy_user</code>: the username for proxy authorization</li>
+<li>
+<code>proxy_pass</code>: the password for proxy authorization</li>
+<li>
+<code>proxy_mode</code>: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)</li>
+</ul><h4>
+<a name="authconfig" class="anchor" href="#authconfig"><span class="octicon octicon-link"></span></a><code>$authConfig</code>
+</h4>
+
+<p>Server HTTP-authentication config.
+This configuration array should follow the following format:</p>
+
+<ul>
+<li>
+<code>auth_user</code>: the username for server authentication</li>
+<li>
+<code>auth_pass</code>: the password for server authentication</li>
+<li>
+<code>auth_mode</code>: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)</li>
+</ul><h2>
+<a name="report" class="anchor" href="#report"><span class="octicon octicon-link"></span></a>Report</h2>
+
+<ul>
+<li>Report any issues <a href="https://github.com/monitorbacklinks/yii2-wordpress/issues">on the GitHub</a>.</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><strong>yii2-wordpress</strong> is released under the MIT License. See the bundled <code>LICENSE.md</code> for details.</p>
+
+<h2>
+<a name="resources" class="anchor" href="#resources"><span class="octicon octicon-link"></span></a>Resources</h2>
+
+<ul>
+<li><a href="http://monitorbacklinks.github.io/yii2-wordpress">Project Page</a></li>
+<li><a href="https://packagist.org/packages/monitorbacklinks/yii2-wordpress">Packagist Package</a></li>
+<li><a href="https://github.com/monitorbacklinks/yii2-wordpress">Source Code</a></li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Yii2-wordpress maintained by <a href="https://github.com/monitorbacklinks">monitorbacklinks</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
