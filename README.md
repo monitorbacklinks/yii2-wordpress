@@ -16,6 +16,7 @@ This component is built on top of [Wordpress XML-RPC PHP Client](https://github.
 
 - Yii 2.0 (dev-master)
 - PHP 5.4
+- PHP extension [XML-RPC](http://php.net//manual/en/book.xmlrpc.php)
 
 > Note:
 This extension mandatorily requires [Yii Framework 2](https://github.com/yiisoft/yii2).
