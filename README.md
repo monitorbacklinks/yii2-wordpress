@@ -57,11 +57,15 @@ Create a component in your configuration file:
 After that just use this component:
 
 ```php
-try {
-    $post = \Yii::$app->blog->getPost($id);
-} catch (\Exception $exception) {
-    echo $exception->getMessage();
-}
+    $blogPosts = [];
+    try {
+        $blogPosts = Yii::$app->blog->getPosts([
+            'post_status' => 'publish',
+            'number' => 10
+        ], ['guid', 'post_title', 'post_content']);
+    } catch (\Exception $exception) {
+        Yii::error($exception->getMessage());
+    }
 ```
 
 For more information about available methods and their options,
