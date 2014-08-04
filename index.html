@@ -51,6 +51,8 @@
 <ul>
 <li>Yii 2.0 (dev-master)</li>
 <li>PHP 5.4</li>
+<li>PHP extension <a href="http://php.net//manual/en/book.xmlrpc.php">XML-RPC</a>
+</li>
 </ul><blockquote>
 <p>Note:
 This extension mandatorily requires <a href="https://github.com/yiisoft/yii2">Yii Framework 2</a>.
@@ -80,8 +82,8 @@ The framework is under active development and the first stable release of Yii 2 
 <div class="highlight highlight-php"><pre>    <span class="s1">'components'</span> <span class="o">=&gt;</span> <span class="p">[</span>
         <span class="o">...</span>
         <span class="s1">'blog'</span> <span class="o">=&gt;</span> <span class="p">[</span>
-            <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'monitorbacklinks\yii2wp\Wordpress'</span><span class="p">,</span>
-            <span class="s1">'endpoint'</span> <span class="o">=&gt;</span> <span class="s1">'http://example.com/endpoint.php'</span><span class="p">,</span>
+            <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'\monitorbacklinks\yii2wp\Wordpress'</span><span class="p">,</span>
+            <span class="s1">'endpoint'</span> <span class="o">=&gt;</span> <span class="s1">'http://example.com/xmlrpc.php'</span><span class="p">,</span>
             <span class="s1">'username'</span> <span class="o">=&gt;</span> <span class="s1">'demo'</span><span class="p">,</span>
             <span class="s1">'password'</span> <span class="o">=&gt;</span> <span class="s1">'demo'</span>
         <span class="p">]</span>
@@ -91,11 +93,15 @@ The framework is under active development and the first stable release of Yii 2 
 
 <p>After that just use this component:</p>
 
-<div class="highlight highlight-php"><pre><span class="k">try</span> <span class="p">{</span>
-    <span class="nv">$post</span> <span class="o">=</span> <span class="nx">\Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">getPost</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$exception</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
-<span class="p">}</span>
+<div class="highlight highlight-php"><pre>    <span class="nv">$blogPosts</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="nv">$blogPosts</span> <span class="o">=</span> <span class="nx">Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">getPosts</span><span class="p">([</span>
+            <span class="s1">'post_status'</span> <span class="o">=&gt;</span> <span class="s1">'publish'</span><span class="p">,</span>
+            <span class="s1">'number'</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+        <span class="p">],</span> <span class="p">[</span><span class="s1">'guid'</span><span class="p">,</span> <span class="s1">'post_title'</span><span class="p">,</span> <span class="s1">'post_content'</span><span class="p">]);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$exception</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Yii</span><span class="o">::</span><span class="na">error</span><span class="p">(</span><span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">());</span>
+    <span class="p">}</span>
 </pre></div>
 
 <p>For more information about available methods and their options,
@@ -122,39 +128,7 @@ please read <a href="http://letrunghieu.github.io/wordpress-xmlrpc-client/api/cl
 
 <p>Wordpress authentication password.</p>
 
-<h4>
-<a name="proxyconfig" class="anchor" href="#proxyconfig"><span class="octicon octicon-link"></span></a><code>$proxyConfig</code>
-</h4>
-
-<p>Proxy server config.
-This configuration array should follow the following format:</p>
-
-<ul>
-<li>
-<code>proxy_ip</code>: the ip of the proxy server (WITHOUT port)</li>
-<li>
-<code>proxy_port</code>: the port of the proxy server</li>
-<li>
-<code>proxy_user</code>: the username for proxy authorization</li>
-<li>
-<code>proxy_pass</code>: the password for proxy authorization</li>
-<li>
-<code>proxy_mode</code>: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)</li>
-</ul><h4>
-<a name="authconfig" class="anchor" href="#authconfig"><span class="octicon octicon-link"></span></a><code>$authConfig</code>
-</h4>
-
-<p>Server HTTP-authentication config.
-This configuration array should follow the following format:</p>
-
-<ul>
-<li>
-<code>auth_user</code>: the username for server authentication</li>
-<li>
-<code>auth_pass</code>: the password for server authentication</li>
-<li>
-<code>auth_mode</code>: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)</li>
-</ul><h2>
+<h2>
 <a name="report" class="anchor" href="#report"><span class="octicon octicon-link"></span></a>Report</h2>
 
 <ul>
