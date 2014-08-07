@@ -40,7 +40,10 @@ to the `require` section of your `composer.json` file.
 
 ## Usage
 
-Create a component in your configuration file:
+### Component creation
+
+In order to use this extension, first thing you need to do is to create a `blog` (you can change the name if you want)
+component and configure it. Here is the example of minimal configuration (in your `config/main.php`):
 
 ```php
     'components' => [
@@ -55,37 +58,153 @@ Create a component in your configuration file:
     ]
 ```
 
-After that just use this component:
+### First API request
+
+When component is configured, you can start making requests to your Wordpress site.
+
+For example, get ten latest published posts. Select `guid`, `post_title` and `post_content` fields only:
 
 ```php
-    $blogPosts = [];
-    try {
-        $blogPosts = Yii::$app->blog->getPosts([
-            'post_status' => 'publish',
-            'number' => 10
-        ], ['guid', 'post_title', 'post_content']);
-    } catch (\Exception $exception) {
-        Yii::error($exception->getMessage());
-    }
+    $blogPosts = Yii::$app->blog->getPosts([
+        'post_status' => 'publish',
+        'number' => 10
+    ], ['guid', 'post_title', 'post_content']);
 ```
 
-For more information about available methods and their options,
-please read [Wordpress XML-RPC PHP Client Class Reference](http://letrunghieu.github.io/wordpress-xmlrpc-client/api/class-HieuLe.WordpressXmlrpcClient.WordpressClient.html).
+Or create a new post with title "New post" and content "Hello world!":
+
+```php
+    $postID = Yii::$app->blog->newPost('New post', 'Hello world!');
+```
+
+### Caching request results
+
+Making API calls to an external application means delays.
+If you don't want your users to wait for a Wordpress response each time, caching is a right thing to do:
+
+```php
+    // The user profile will be fetched from cache if available.
+    // If not, the query will be made against XML-RPC API and cached for use next time.
+    $profile = Yii::$app->blog->cache(function (Wordpress $blog) {
+        return $blog->getProfile();
+    });
+```
+
+In case, if you need something more complex, you can disable caching for some requests:
+
+```php
+    $blogPosts = Yii::$app->blog->cache(function (Wordpress $blog) {
+
+        // ... queries that use query cache ...
+
+        return $blog->noCache(function (Wordpress $blog) {
+            // this query will not use query cache
+            return $blog->getPosts();
+        });
+    });
+```
+
+Caching will work for data retrieval queries only.
+Queries that create, update or delete records will not use caching component.
 
 
-## Configuration
+## Configuration parameters
 
 #### `$endpoint`
 
-Wordpress XML-RPC API endpoint URL.
+`string` Wordpress XML-RPC API endpoint URL.
 
 #### `$username`
 
-Wordpress authentication username.
+`string` Wordpress authentication username.
+Please note, that any actions made by XML-RPC will be made on behalf of this user.
 
 #### `$password`
 
-Wordpress authentication password.
+`string` Wordpress authentication password.
+
+#### `$proxyConfig`
+
+`array` Proxy server configuration.
+This configuration array should follow the following format:
+
+- `proxy_ip`: the ip of the proxy server (WITHOUT port)
+- `proxy_port`: the port of the proxy server
+- `proxy_user`: the username for proxy authorization
+- `proxy_pass`: the password for proxy authorization
+- `proxy_mode`: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)
+
+Empty array means that no proxy should be used.
+
+Default value: `[]`.
+
+#### `$authConfig`
+
+`array` Server HTTP authentication configuration.
+This configuration array should follow the following format:
+
+- `auth_user`: the username for server authentication
+- `auth_pass`: the password for server authentication
+- `auth_mode`: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)
+
+Empty array means that no HTTP authentication should be used.
+
+Default value: `[]`.
+
+#### `$enableQueryCache`
+
+`boolean` Whether to enable query caching.
+
+Default value: `true`.
+
+#### `$queryCacheDuration`
+
+`integer` The default number of seconds that query results can remain valid in cache.
+Use 0 to indicate that the cached data will never expire.
+
+Default value: `3600`.
+
+#### `$queryCache`
+
+`Cache|string` The cache object or the ID of the cache application component that is used for query caching.
+
+Default value: `'cache'`.
+
+
+## List of available methods
+
+#### ```php \HieuLe\WordpressXmlrpcClient\WordpressClient getClient() ```
+
+Get [Wordpress XML-RPC PHP Client](https://github.com/letrunghieu/wordpress-xmlrpc-client) instance.
+You can use this method if you need some additional methods that is not provided by this extension.
+
+##### Return values
+
+`WordpressClient` Wordpress XML-RPC PHP Client instance.
+
+
+## Errors logging
+
+There are a lot of things that can go wrong (network problems, wrong Wordpress user permissions, etc.).
+This extension will catch them and pass to `monitorbacklinks\yii2wp\Wordpress::*` category.
+
+In order to see them, you can configure your Yii2 `log` component something similar to this:
+
+```php
+    'components' => [
+        ...
+        'log' => [
+            'targets' => [
+                'file' => [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error'],
+                    'categories' => ['monitorbacklinks\yii2wp\Wordpress::*'],
+                ],
+            ],
+        ],
+        ...
+    ]
+``
 
 
 ## Report

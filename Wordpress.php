@@ -62,6 +62,7 @@ class Wordpress extends Component
 
     /**
      * @var string $username Wordpress authentication username.
+     * Please note, that any actions made by XML-RPC will be made on behalf of this user.
      */
     public $username;
 
@@ -319,7 +320,7 @@ class Wordpress extends Component
      * Queries performed within the callable will not use query cache at all. For example,
      *
      * ```php
-     * Yii::$app->blog->cache(function (Wordpress $blog) {
+     * $blogPosts = Yii::$app->blog->cache(function (Wordpress $blog) {
      *
      *     // ... queries that use query cache ...
      *
