@@ -237,6 +237,7 @@ class Wordpress extends Component
                 if (isset($cache) && $dataRetrieval) {
                     if (($result = $cache->get($cacheKey)) !== false) {
                         Yii::trace('Query result served from cache', $token);
+                        Yii::endProfile($profile);
                         return $result;
                     }
                 }
@@ -366,7 +367,7 @@ class Wordpress extends Component
                 $cache = $this->queryCache;
             }
             if ($cache instanceof Cache) {
-                return is_array($info) ? [$cache, $info[0], $info[1]] : [$cache, null, null];
+                return is_array($info) ? [$cache, $info[0], $info[1]] : null;
             }
         }
         return null;
