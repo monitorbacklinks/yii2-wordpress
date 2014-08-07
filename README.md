@@ -117,6 +117,7 @@ Queries that create, update or delete records will not use caching component.
 #### `$username`
 
 `string` Wordpress authentication username.
+
 Please note, that any actions made by XML-RPC will be made on behalf of this user.
 
 #### `$password`
@@ -126,6 +127,7 @@ Please note, that any actions made by XML-RPC will be made on behalf of this use
 #### `$proxyConfig`
 
 `array` Proxy server configuration.
+
 This configuration array should follow the following format:
 
 - `proxy_ip`: the ip of the proxy server (WITHOUT port)
@@ -141,6 +143,7 @@ Default value: `[]`.
 #### `$authConfig`
 
 `array` Server HTTP authentication configuration.
+
 This configuration array should follow the following format:
 
 - `auth_user`: the username for server authentication
@@ -160,6 +163,7 @@ Default value: `true`.
 #### `$queryCacheDuration`
 
 `integer` The default number of seconds that query results can remain valid in cache.
+
 Use 0 to indicate that the cached data will never expire.
 
 Default value: `3600`.
@@ -173,12 +177,12 @@ Default value: `'cache'`.
 
 ## List of available methods
 
-#### ```php \HieuLe\WordpressXmlrpcClient\WordpressClient getClient() ```
+##### `WordpressClient getClient() `
 
 Get [Wordpress XML-RPC PHP Client](https://github.com/letrunghieu/wordpress-xmlrpc-client) instance.
 You can use this method if you need some additional methods that is not provided by this extension.
 
-##### Return values
+###### Return values
 
 `WordpressClient` Wordpress XML-RPC PHP Client instance.
 
@@ -186,9 +190,9 @@ You can use this method if you need some additional methods that is not provided
 ## Errors logging
 
 There are a lot of things that can go wrong (network problems, wrong Wordpress user permissions, etc.).
-This extension will catch them and pass to `monitorbacklinks\yii2wp\Wordpress::*` category.
+This extension will catch them and pass to `monitorbacklinks\yii2wp\Wordpress::*` logging category.
 
-In order to see them, you can configure your Yii2 `log` component something similar to this:
+In order to see them, you can configure your Yii2 `log` component to something similar to this:
 
 ```php
     'components' => [
@@ -204,7 +208,7 @@ In order to see them, you can configure your Yii2 `log` component something simi
         ],
         ...
     ]
-``
+```
 
 
 ## Report
