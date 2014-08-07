@@ -4,6 +4,7 @@ namespace monitorbacklinks\yii2wp;
 
 use HieuLe\WordpressXmlrpcClient\WordpressClient;
 use yii\base\Component;
+use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\validators\UrlValidator;
@@ -121,6 +122,12 @@ class Wordpress extends Component
     public $queryCache = 'cache';
 
     /**
+     * @var bool $catchExceptions Whether to catch exceptions thrown by Wordpress API, pass them to the log and return
+     * default value, or transmit them further along the call chain.
+     */
+    public $catchExceptions = true;
+
+    /**
      * @var array $methodMap An internal storage for allowed methods and their values in case of error.
      * @internal
      */
@@ -212,6 +219,7 @@ class Wordpress extends Component
      * @param string $name The method name.
      * @param array $params Method parameters.
      *
+     * @throws \Exception If error occurred an $catchExceptions set to false.
      * @return mixed The method return value.
      */
     public function __call($name, $params)
@@ -255,8 +263,12 @@ class Wordpress extends Component
 
             } catch (\Exception $exception) {
                 Yii::endProfile($profile);
-                Yii::error($exception->getMessage(), $token);
-                return $this->methodMap[$name];
+                if ($this->catchExceptions) {
+                    Yii::error($exception->getMessage(), $token);
+                    return $this->methodMap[$name];
+                } else {
+                    throw $exception;
+                }
             }
         }
 

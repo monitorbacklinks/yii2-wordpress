@@ -154,6 +154,13 @@ Empty array means that no HTTP authentication should be used.
 
 Default value: `[]`.
 
+#### `$catchExceptions`
+
+`boolean` Whether to catch exceptions thrown by Wordpress API, pass them to the log and return default value,
+or transmit them further along the call chain.
+
+Default value: `true`.
+
 #### `$enableQueryCache`
 
 `boolean` Whether to enable query caching.
@@ -177,44 +184,18 @@ Default value: `'cache'`.
 
 ## List of available methods
 
+The full list of available methods can be found in
+[Wordpress XML-RPC PHP Client Class Reference](http://letrunghieu.github.io/wordpress-xmlrpc-client/api/class-HieuLe.WordpressXmlrpcClient.WordpressClient.html).
 
-##### `WordpressClient getClient()`
-
-Get [Wordpress XML-RPC PHP Client](https://github.com/letrunghieu/wordpress-xmlrpc-client) instance.
-You can use this method if you need some additional methods that is not provided by this extension.
-
-###### Return values
-
-`WordpressClient` Wordpress XML-RPC PHP Client instance.
-
-
-##### `mixed cache(callable $callable, $duration = null, $dependency = null)`
-
-Uses query cache for the queries performed with the callable.
-When query caching is enabled (`$enableQueryCache` is true and `$queryCache` refers to a valid cache),
-queries performed within the callable will be cached and their results will be fetched from cache if available.
-
-Note that query cache is only meaningful for queries that return results. For queries that create, update or
-delete records, query cache will not be used.
-
-###### Parameters
-
-- `callable` `$callable` A PHP callable that contains XML-RPC API queries which will make use of query cache.
-The signature of the callable is `function (Wordpress $blog)`.
-- `integer` `$duration` The number of seconds that query results can remain valid in the cache.
-If this is not set, the value of `$queryCacheDuration` will be used instead.
-Use 0 to indicate that the cached data will never expire.
-- `\yii\caching\Dependency` `$dependency` The cache dependency associated with the cached query results.
-
-###### Return values
-
-`mixed` The return result of the callable.
-
+Please note, that all those methods are throwing an exceptions in case of any errors.
+While this extension is configured (by default), in case of errors, to return an empty array for any data retrial
+methods and false for any create, update or delete methods. Please see `$catchExceptions` configuration option for details.
 
 ## Errors logging
 
 There are a lot of things that can go wrong (network problems, wrong Wordpress user permissions, etc.).
-This extension will catch them and pass to `monitorbacklinks\yii2wp\Wordpress::*` logging category.
+If `$catchExceptions` configuration option is set to `true` (default value), this extension will catch them and pass to
+`monitorbacklinks\yii2wp\Wordpress::*` logging category.
 
 In order to see them, you can configure your Yii2 `log` component to something similar to this:
 
