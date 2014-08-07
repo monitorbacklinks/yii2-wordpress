@@ -177,7 +177,8 @@ Default value: `'cache'`.
 
 ## List of available methods
 
-##### `WordpressClient getClient() `
+
+##### `WordpressClient getClient()`
 
 Get [Wordpress XML-RPC PHP Client](https://github.com/letrunghieu/wordpress-xmlrpc-client) instance.
 You can use this method if you need some additional methods that is not provided by this extension.
@@ -185,6 +186,29 @@ You can use this method if you need some additional methods that is not provided
 ###### Return values
 
 `WordpressClient` Wordpress XML-RPC PHP Client instance.
+
+
+##### `mixed cache(callable $callable, $duration = null, $dependency = null)`
+
+Uses query cache for the queries performed with the callable.
+When query caching is enabled (`$enableQueryCache` is true and `$queryCache` refers to a valid cache),
+queries performed within the callable will be cached and their results will be fetched from cache if available.
+
+Note that query cache is only meaningful for queries that return results. For queries that create, update or
+delete records, query cache will not be used.
+
+###### Parameters
+
+- `callable` `$callable` A PHP callable that contains XML-RPC API queries which will make use of query cache.
+The signature of the callable is `function (Wordpress $blog)`.
+- `integer` `$duration` The number of seconds that query results can remain valid in the cache.
+If this is not set, the value of `$queryCacheDuration` will be used instead.
+Use 0 to indicate that the cached data will never expire.
+- `\yii\caching\Dependency` `$dependency` The cache dependency associated with the cached query results.
+
+###### Return values
+
+`mixed` The return result of the callable.
 
 
 ## Errors logging
