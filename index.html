@@ -77,7 +77,11 @@ The framework is under active development and the first stable release of Yii 2 
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Create a component in your configuration file:</p>
+<h3>
+<a name="component-creation" class="anchor" href="#component-creation"><span class="octicon octicon-link"></span></a>Component creation</h3>
+
+<p>In order to use this extension, first thing you need to do is to create a <code>blog</code> (you can change the name if you want)
+component and configure it. Here is the example of minimal configuration (in your <code>config/main.php</code>):</p>
 
 <div class="highlight highlight-php"><pre>    <span class="s1">'components'</span> <span class="o">=&gt;</span> <span class="p">[</span>
         <span class="o">...</span>
@@ -91,42 +95,186 @@ The framework is under active development and the first stable release of Yii 2 
     <span class="p">]</span>
 </pre></div>
 
-<p>After that just use this component:</p>
+<h3>
+<a name="first-api-request" class="anchor" href="#first-api-request"><span class="octicon octicon-link"></span></a>First API request</h3>
 
-<div class="highlight highlight-php"><pre>    <span class="nv">$blogPosts</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="k">try</span> <span class="p">{</span>
-        <span class="nv">$blogPosts</span> <span class="o">=</span> <span class="nx">Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">getPosts</span><span class="p">([</span>
-            <span class="s1">'post_status'</span> <span class="o">=&gt;</span> <span class="s1">'publish'</span><span class="p">,</span>
-            <span class="s1">'number'</span> <span class="o">=&gt;</span> <span class="mi">10</span>
-        <span class="p">],</span> <span class="p">[</span><span class="s1">'guid'</span><span class="p">,</span> <span class="s1">'post_title'</span><span class="p">,</span> <span class="s1">'post_content'</span><span class="p">]);</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$exception</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Yii</span><span class="o">::</span><span class="na">error</span><span class="p">(</span><span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">());</span>
-    <span class="p">}</span>
+<p>When component is configured, you can start making requests to your Wordpress site.</p>
+
+<p>For example, get ten latest published posts. Select <code>guid</code>, <code>post_title</code> and <code>post_content</code> fields only:</p>
+
+<div class="highlight highlight-php"><pre>    <span class="nv">$blogPosts</span> <span class="o">=</span> <span class="nx">Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">getPosts</span><span class="p">([</span>
+        <span class="s1">'post_status'</span> <span class="o">=&gt;</span> <span class="s1">'publish'</span><span class="p">,</span>
+        <span class="s1">'number'</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+    <span class="p">],</span> <span class="p">[</span><span class="s1">'guid'</span><span class="p">,</span> <span class="s1">'post_title'</span><span class="p">,</span> <span class="s1">'post_content'</span><span class="p">]);</span>
 </pre></div>
 
-<p>For more information about available methods and their options,
-please read <a href="http://letrunghieu.github.io/wordpress-xmlrpc-client/api/class-HieuLe.WordpressXmlrpcClient.WordpressClient.html">Wordpress XML-RPC PHP Client Class Reference</a>.</p>
+<p>Or create a new post with title "New post" and content "Hello world!":</p>
+
+<div class="highlight highlight-php"><pre>    <span class="nv">$postID</span> <span class="o">=</span> <span class="nx">Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">newPost</span><span class="p">(</span><span class="s1">'New post'</span><span class="p">,</span> <span class="s1">'Hello world!'</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="caching-request-results" class="anchor" href="#caching-request-results"><span class="octicon octicon-link"></span></a>Caching request results</h3>
+
+<p>Making API calls to an external application means delays.
+If you don't want your users to wait for a Wordpress response each time, caching is a right thing to do:</p>
+
+<div class="highlight highlight-php"><pre>    <span class="c1">// The user profile will be fetched from cache if available.</span>
+    <span class="c1">// If not, the query will be made against XML-RPC API and cached for use next time.</span>
+    <span class="nv">$profile</span> <span class="o">=</span> <span class="nx">Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">cache</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nx">Wordpress</span> <span class="nv">$blog</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">getProfile</span><span class="p">();</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>In case, if you need something more complex, you can disable caching for some requests:</p>
+
+<div class="highlight highlight-php"><pre>    <span class="nv">$blogPosts</span> <span class="o">=</span> <span class="nx">Yii</span><span class="o">::</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">blog</span><span class="o">-&gt;</span><span class="na">cache</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nx">Wordpress</span> <span class="nv">$blog</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// ... queries that use query cache ...</span>
+
+        <span class="k">return</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">noCache</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nx">Wordpress</span> <span class="nv">$blog</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// this query will not use query cache</span>
+            <span class="k">return</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">getPosts</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>Caching will work for data retrieval queries only.
+Queries that create, update or delete records will not use caching component.</p>
 
 <h2>
-<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+<a name="configuration-parameters" class="anchor" href="#configuration-parameters"><span class="octicon octicon-link"></span></a>Configuration parameters</h2>
 
 <h4>
 <a name="endpoint" class="anchor" href="#endpoint"><span class="octicon octicon-link"></span></a><code>$endpoint</code>
 </h4>
 
-<p>Wordpress XML-RPC API endpoint URL.</p>
+<p><code>string</code> Wordpress XML-RPC API endpoint URL.</p>
 
 <h4>
 <a name="username" class="anchor" href="#username"><span class="octicon octicon-link"></span></a><code>$username</code>
 </h4>
 
-<p>Wordpress authentication username.</p>
+<p><code>string</code> Wordpress authentication username.</p>
+
+<p>Please note, that any actions made by XML-RPC will be made on behalf of this user.</p>
 
 <h4>
 <a name="password" class="anchor" href="#password"><span class="octicon octicon-link"></span></a><code>$password</code>
 </h4>
 
-<p>Wordpress authentication password.</p>
+<p><code>string</code> Wordpress authentication password.</p>
+
+<h4>
+<a name="proxyconfig" class="anchor" href="#proxyconfig"><span class="octicon octicon-link"></span></a><code>$proxyConfig</code>
+</h4>
+
+<p><code>array</code> Proxy server configuration.</p>
+
+<p>This configuration array should follow the following format:</p>
+
+<ul>
+<li>
+<code>proxy_ip</code>: the ip of the proxy server (WITHOUT port)</li>
+<li>
+<code>proxy_port</code>: the port of the proxy server</li>
+<li>
+<code>proxy_user</code>: the username for proxy authorization</li>
+<li>
+<code>proxy_pass</code>: the password for proxy authorization</li>
+<li>
+<code>proxy_mode</code>: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)</li>
+</ul><p>Empty array means that no proxy should be used.</p>
+
+<p>Default value: <code>[]</code>.</p>
+
+<h4>
+<a name="authconfig" class="anchor" href="#authconfig"><span class="octicon octicon-link"></span></a><code>$authConfig</code>
+</h4>
+
+<p><code>array</code> Server HTTP authentication configuration.</p>
+
+<p>This configuration array should follow the following format:</p>
+
+<ul>
+<li>
+<code>auth_user</code>: the username for server authentication</li>
+<li>
+<code>auth_pass</code>: the password for server authentication</li>
+<li>
+<code>auth_mode</code>: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)</li>
+</ul><p>Empty array means that no HTTP authentication should be used.</p>
+
+<p>Default value: <code>[]</code>.</p>
+
+<h4>
+<a name="catchexceptions" class="anchor" href="#catchexceptions"><span class="octicon octicon-link"></span></a><code>$catchExceptions</code>
+</h4>
+
+<p><code>boolean</code> Whether to catch exceptions thrown by Wordpress API, pass them to the log and return default value,
+or transmit them further along the call chain.</p>
+
+<p>Default value: <code>true</code>.</p>
+
+<h4>
+<a name="enablequerycache" class="anchor" href="#enablequerycache"><span class="octicon octicon-link"></span></a><code>$enableQueryCache</code>
+</h4>
+
+<p><code>boolean</code> Whether to enable query caching.</p>
+
+<p>Default value: <code>true</code>.</p>
+
+<h4>
+<a name="querycacheduration" class="anchor" href="#querycacheduration"><span class="octicon octicon-link"></span></a><code>$queryCacheDuration</code>
+</h4>
+
+<p><code>integer</code> The default number of seconds that query results can remain valid in cache.</p>
+
+<p>Use 0 to indicate that the cached data will never expire.</p>
+
+<p>Default value: <code>3600</code>.</p>
+
+<h4>
+<a name="querycache" class="anchor" href="#querycache"><span class="octicon octicon-link"></span></a><code>$queryCache</code>
+</h4>
+
+<p><code>Cache|string</code> The cache object or the ID of the cache application component that is used for query caching.</p>
+
+<p>Default value: <code>'cache'</code>.</p>
+
+<h2>
+<a name="list-of-available-methods" class="anchor" href="#list-of-available-methods"><span class="octicon octicon-link"></span></a>List of available methods</h2>
+
+<p>The full list of available methods can be found in
+<a href="http://letrunghieu.github.io/wordpress-xmlrpc-client/api/class-HieuLe.WordpressXmlrpcClient.WordpressClient.html">Wordpress XML-RPC PHP Client Class Reference</a>.</p>
+
+<p>Please note, that all those methods are throwing an exceptions in case of any errors.
+While this extension is configured (by default), in case of errors, to return an empty array for any data retrial
+methods and false for any create, update or delete methods. Please see <code>$catchExceptions</code> configuration option for details.</p>
+
+<h2>
+<a name="errors-logging" class="anchor" href="#errors-logging"><span class="octicon octicon-link"></span></a>Errors logging</h2>
+
+<p>There are a lot of things that can go wrong (network problems, wrong Wordpress user permissions, etc.).
+If <code>$catchExceptions</code> configuration option is set to <code>true</code> (default value), this extension will catch them and pass to
+<code>monitorbacklinks\yii2wp\Wordpress::*</code> logging category.</p>
+
+<p>In order to see them, you can configure your Yii2 <code>log</code> component to something similar to this:</p>
+
+<div class="highlight highlight-php"><pre>    <span class="s1">'components'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+        <span class="o">...</span>
+        <span class="s1">'log'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">'targets'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                <span class="s1">'file'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                    <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'yii\log\FileTarget'</span><span class="p">,</span>
+                    <span class="s1">'levels'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'error'</span><span class="p">],</span>
+                    <span class="s1">'categories'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'monitorbacklinks\yii2wp\Wordpress::*'</span><span class="p">],</span>
+                <span class="p">],</span>
+            <span class="p">],</span>
+        <span class="p">],</span>
+        <span class="o">...</span>
+    <span class="p">]</span>
+</pre></div>
 
 <h2>
 <a name="report" class="anchor" href="#report"><span class="octicon octicon-link"></span></a>Report</h2>
