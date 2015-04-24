@@ -165,6 +165,7 @@ class Wordpress extends Component
         'getUsers' => [],
         'getProfile' => [],
         'editProfile' => false,
+        'callCustomMethod' => false,
     ];
 
     /**
