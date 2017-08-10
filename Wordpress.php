@@ -277,6 +277,15 @@ class Wordpress extends Component
     }
 
     /**
+    * Check if query is data retrieval.
+    * @return bool
+    */
+    protected function isDataRetrievalQuery($name){
+        return (strpos($name, 'get') === 0);
+    }
+    
+    
+    /**
      * Get wordpress API client instance.
      *
      * @return WordpressClient Wordpress API client instance.
