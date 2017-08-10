@@ -230,7 +230,7 @@ class Wordpress extends Component
         if (method_exists($client, $name) && array_key_exists($name, $this->methodMap) && is_callable([$client, $name])) {
             $profile = "Running an XML-RPC API call: {$name}";
             $token = "monitorbacklinks\\yii2wp\\Wordpress::{$name}";
-            $dataRetrieval = $this->isDataRetrievalQuery();
+            $dataRetrieval = $this->isDataRetrievalQuery($name);
             try {
 
                 Yii::beginProfile($profile);
