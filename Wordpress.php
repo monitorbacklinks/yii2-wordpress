@@ -278,7 +278,7 @@ class Wordpress extends Component
 
     /**
     * Check if query is data retrieval.
-    
+    *
     * @param string $name The method name.
     * @param array $params Method parameters.
     * @return bool
