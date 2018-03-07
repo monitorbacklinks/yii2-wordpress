@@ -230,7 +230,7 @@ class Wordpress extends Component
         if (method_exists($client, $name) && array_key_exists($name, $this->methodMap) && is_callable([$client, $name])) {
             $profile = "Running an XML-RPC API call: {$name}";
             $token = "monitorbacklinks\\yii2wp\\Wordpress::{$name}";
-            $dataRetrieval = (strpos($name, 'get') === 0);
+            $dataRetrieval = $this->isDataRetrievalQuery($name, $params);
             try {
 
                 Yii::beginProfile($profile);
@@ -276,6 +276,18 @@ class Wordpress extends Component
         return parent::__call($name, $params);
     }
 
+    /**
+    * Check if query is data retrieval.
+    *
+    * @param string $name The method name.
+    * @param array $params Method parameters.
+    * @return bool
+    */
+    protected function isDataRetrievalQuery($name, $params){
+        return (strpos($name, 'get') === 0);
+    }
+    
+    
     /**
      * Get wordpress API client instance.
      *
