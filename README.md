@@ -1,3 +1,7 @@
+This repository is no longer maintained.
+Issue reports and pull requests will not be attended. You are welcome to fork the repository if you'd like though. 
+==============
+
 Yii2 Wordpress
 ==============
 
